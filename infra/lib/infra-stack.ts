@@ -13,6 +13,11 @@ import {
 // import * as route53 from "aws-cdk-lib/aws-route53";
 // import * as targets from "aws-cdk-lib/aws-route53-targets";
 import { Construct } from "constructs";
+import * as path from "path";
+import * as cdk from "aws-cdk-lib";
+import { aws_lambda_nodejs } from "aws-cdk-lib";
+import * as apigw from "aws-cdk-lib/aws-apigateway";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 
 /**
  * アプリケーションインフラストラクチャのスタック
@@ -102,7 +107,7 @@ export class InfraStack extends Stack {
 
     // ----------------- DynamoDB -----------------
 
-    new aws_dynamodb.Table(this, "post-table", {
+    const post_table = new aws_dynamodb.Table(this, "post-table", {
       tableName: "post-table", // テーブル名の定義
       partitionKey: {
         //パーティションキーの定義
@@ -118,5 +123,39 @@ export class InfraStack extends Stack {
       pointInTimeRecovery: false, // デフォルトはfalse(PITRしない)
       removalPolicy: RemovalPolicy.DESTROY, // cdk destroyでDB削除可
     });
+
+    // ----------------- Backend Stack -----------------
+    // Lambda関数として、createPost をデプロイする
+    const createPost = new aws_lambda_nodejs.NodejsFunction(
+      this,
+      "createPostHandler",
+      {
+        runtime: lambda.Runtime.NODEJS_18_X,
+        entry: path.join(__dirname, "../lambda/createPost.ts"),
+        handler: "index.handler", // デプロイするとindex.mjsになるため
+        bundling: {
+          externalModules: [
+            "@aws-sdk/lib-dynamodb",
+            "@aws-sdk/client-dynamodb",
+          ],
+        },
+      }
+    );
+
+    // createPost関数にDynamoDBの書き込み権限を付与する
+    post_table.grantReadWriteData(createPost);
+
+    // createPost をAPIGatewayのエンドポイントとして公開する
+    const api = new apigw.LambdaRestApi(this, "Endpoint", {
+      handler: createPost,
+      proxy: false,
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigw.Cors.ALL_ORIGINS,
+        allowMethods: apigw.Cors.ALL_METHODS,
+      },
+    });
+
+    // APIGatewayのエンドポイントにPOSTメソッドを追加する
+    api.root.addMethod("POST");
   }
 }
