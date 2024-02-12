@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
   const router = useRouter(); // useRouterフックを使用
 
   const handleClick = () => {
-    void router.push(`posts/${cardData.post_id}`); // /createに遷移する
+    void router.push(`posts?post_id=${cardData.post_id}`);
   };
 
   return (
