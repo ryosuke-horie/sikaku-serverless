@@ -34,7 +34,7 @@ export default function RootLayout({
           }}
         >
           <Header />
-          <main className="flex justify-center items-center min-h-screen p-4">{children}</main>
+          <main className="flex min-h-screen items-center justify-center p-4">{children}</main>
           <Footer />
         </Auth0Provider>
       </body>

@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import LoginButton from '../auth/login';
 import LogoutButton from '../auth/logout';
 import Profile from '../auth/profile';
+import CreateButton from '../createButton';
 
 const Header = () => {
   const { isLoading, isAuthenticated, error } = useAuth0();
@@ -25,6 +26,7 @@ const Header = () => {
           <a className="btn btn-ghost text-xl">CertifyHub</a>
         </div>
         <div className="flex-none">
+          <CreateButton />
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="avatar btn btn-circle btn-ghost">
               <div className="w-10 rounded-full">
