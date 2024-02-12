@@ -1,6 +1,10 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface CardData {
+  post_id: string;
   title: string;
   // 必要に応じて他のプロパティを追加
 }
@@ -10,8 +14,10 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ cardData }) => {
+  const router = useRouter(); // useRouterフックを使用
+
   const handleClick = () => {
-    console.log('clicked');
+    void router.push(`posts/${cardData.post_id}`); // /createに遷移する
   };
 
   return (
@@ -27,10 +33,10 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
       </figure>
       <div className="card-body items-center text-center">
         {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
-        <h2 className="card-title">{cardData.title}</h2>
+        <h2 className="card-title">{cardData.Title}</h2>
         <div className="card-actions">
           <button className="btn btn-primary" onClick={handleClick}>
-            続きを読む
+            内容を読む
           </button>
         </div>
       </div>
