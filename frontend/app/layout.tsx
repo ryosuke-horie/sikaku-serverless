@@ -4,6 +4,7 @@ import './globals.css';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { Inter } from 'next/font/google';
 
+import Header from './_components/common/header';
 const inter = Inter({ subsets: ['latin'] });
 
 // const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default function RootLayout({
             redirect_uri: redirect_uri,
           }}
         >
+          <Header />
           {children}
         </Auth0Provider>
       </body>
