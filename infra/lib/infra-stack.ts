@@ -7,6 +7,7 @@ import {
   aws_cloudfront_origins,
   aws_iam,
   aws_s3,
+  aws_dynamodb,
 } from "aws-cdk-lib";
 // import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 // import * as route53 from "aws-cdk-lib/aws-route53";
@@ -98,5 +99,24 @@ export class InfraStack extends Stack {
     // 	),
     // 	recordName: "timetable-hideskick.net",
     // });
+
+    // ----------------- DynamoDB -----------------
+
+    new aws_dynamodb.Table(this, "post-table", {
+      tableName: "post-table", // テーブル名の定義
+      partitionKey: {
+        //パーティションキーの定義
+        name: "Qualification", // 資格名
+        type: aws_dynamodb.AttributeType.STRING,
+      },
+      sortKey: {
+        // ソートキーの定義
+        name: "created_at", // 作成日
+        type: aws_dynamodb.AttributeType.STRING,
+      },
+      billingMode: aws_dynamodb.BillingMode.PAY_PER_REQUEST, // オンデマンド請求
+      pointInTimeRecovery: false, // デフォルトはfalse(PITRしない)
+      removalPolicy: RemovalPolicy.DESTROY, // cdk destroyでDB削除可
+    });
   }
 }
