@@ -1,6 +1,19 @@
 import Image from 'next/image';
 
-const Card = () => {
+interface CardData {
+  title: string;
+  // 必要に応じて他のプロパティを追加
+}
+
+interface CardProps {
+  cardData: CardData;
+}
+
+const Card: React.FC<CardProps> = ({ cardData }) => {
+  const handleClick = () => {
+    console.log('clicked');
+  };
+
   return (
     <div className="card w-96 bg-base-100 shadow-xl">
       <figure className="px-10 pt-10">
@@ -13,10 +26,12 @@ const Card = () => {
         />
       </figure>
       <div className="card-body items-center text-center">
-        <h2 className="card-title">Shoes!</h2>
-        <p>If a dog chews shoes whose shoes does he choose?</p>
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+        <h2 className="card-title">{cardData.title}</h2>
         <div className="card-actions">
-          <button className="btn btn-primary">Buy Now</button>
+          <button className="btn btn-primary" onClick={handleClick}>
+            続きを読む
+          </button>
         </div>
       </div>
     </div>

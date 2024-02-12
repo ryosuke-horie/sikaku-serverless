@@ -4,18 +4,21 @@ import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
-export const handler = async (event, context) => {
-  const qualification = event.majorCategory + "#" + event.minorCategory;
+export const handler = async (event) => {
+  const requestBody = JSON.parse(event.body);
+
+  const qualification =
+    requestBody.majorCategory + "#" + requestBody.minorCategory;
   const createdAt = new Date().toISOString(); // ISO 8601形式のタイムスタンプ
 
   const item = {
     Qualification: qualification, // パーティションキー
     created_at: createdAt, // ソートキー
-    Title: event.title,
-    MajorCategory: event.majorCategory,
-    MinorCategory: event.minorCategory,
-    Content: event.content,
-    // Auth0: event.auth0user, // 認証情報がある場合はこの行をアンコメント
+    Title: requestBody.title,
+    MajorCategory: requestBody.majorCategory,
+    MinorCategory: requestBody.minorCategory,
+    Content: requestBody.content,
+    // Auth0: requestBody.auth0user, // 認証情報がある場合はこの行をアンコメント
     // その他の必要な属性...
   };
 
