@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const Create = () => {
   const router = useRouter(); // useRouterフックを使用
@@ -25,17 +25,12 @@ const Create = () => {
       content,
     };
 
-    console.log(postParams);
-
-    // ここにAPIエンドポイントへのPOSTリクエストを実行するコードを記述
-    // https://i9pnpgf341.execute-api.ap-northeast-1.amazonaws.com/prod/
     try {
       // Execute the POST request to the provided API endpoint
-      const response = await fetch('https://i9pnpgf341.execute-api.ap-northeast-1.amazonaws.com/prod/', {
+      const response = await fetch('https://i9pnpgf341.execute-api.ap-northeast-1.amazonaws.com/prod/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // You may need to add authorization headers or other headers here
         },
         body: JSON.stringify(postParams),
       });
@@ -61,7 +56,6 @@ const Create = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-
       <select
         className="select select-bordered mb-4 w-full max-w-lg text-lg"
         name="majorCategory"
@@ -75,7 +69,6 @@ const Create = () => {
         <option value="google cloud">Google Cloud</option>
         <option value="azure">Azure</option>
       </select>
-
       <select
         className="select select-bordered mb-4 w-full max-w-lg text-lg"
         name="minorCategory"
@@ -88,15 +81,14 @@ const Create = () => {
         <option value="clf">CLF</option>
         <option value="saa">SAA</option>
       </select>
-
       <textarea
-        className="textarea textarea-bordered mb-4 w-full h-32 max-w-lg p-4 text-lg"
+        className="textarea textarea-bordered mb-4 h-32 w-full max-w-lg p-4 text-lg"
         placeholder="ここに内容を入力"
         name="content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       ></textarea>
-
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <button className="btn btn-primary w-full max-w-lg text-lg" onClick={handlePost}>
         送信
       </button>
