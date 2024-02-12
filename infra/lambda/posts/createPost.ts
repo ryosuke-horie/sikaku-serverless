@@ -7,14 +7,14 @@ const docClient = DynamoDBDocumentClient.from(client);
 export const handler = async (event) => {
   const requestBody = JSON.parse(event.body);
 
-  const qualification =
-    `${requestBody.majorCategory}#${requestBody.minorCategory}`;
+  const qualification = `${requestBody.majorCategory}#${requestBody.minorCategory}`;
   const createdAt = new Date().toISOString(); // ISO 8601形式のタイムスタンプ
 
   const item = {
-    Qualification: qualification, // パーティションキー
+    post_id: generateUniqueId(), // パーティションキー
     created_at: createdAt, // ソートキー
     Title: requestBody.title,
+    Qualification: qualification,
     MajorCategory: requestBody.majorCategory,
     MinorCategory: requestBody.minorCategory,
     Content: requestBody.content,
@@ -22,7 +22,7 @@ export const handler = async (event) => {
 
   // DynamoDBに書き込むためのPutCommandを作成
   const command = new PutCommand({
-    TableName: "post-table", // ここで指定したテーブル名に注意
+    TableName: "posts-table", // ここで指定したテーブル名に注意
     Item: item,
   });
 
@@ -57,3 +57,9 @@ export const handler = async (event) => {
     };
   }
 };
+
+function generateUniqueId() {
+  const timestamp = new Date().getTime();
+  const randomString = Math.random().toString(36).substring(2, 8);
+  return `${timestamp}_${randomString}`;
+}

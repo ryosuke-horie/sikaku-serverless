@@ -6,7 +6,7 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 exports.handler = async () => {
   const params = {
-    TableName: "post-table",
+    TableName: "posts-table",
   };
 
   try {

@@ -108,10 +108,10 @@ export class InfraStack extends Stack {
     // ----------------- DynamoDB -----------------
 
     const post_table = new aws_dynamodb.Table(this, "post-table", {
-      tableName: "post-table", // テーブル名の定義
+      tableName: "posts-table", // テーブル名の定義
       partitionKey: {
         //パーティションキーの定義
-        name: "Qualification", // 資格名
+        name: "post_id", // 投稿ID
         type: aws_dynamodb.AttributeType.STRING,
       },
       sortKey: {
