@@ -4,7 +4,9 @@ import './globals.css';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { Inter } from 'next/font/google';
 
+import Footer from './_components/common/footer';
 import Header from './_components/common/header';
+
 const inter = Inter({ subsets: ['latin'] });
 
 // const metadata: Metadata = {
@@ -33,6 +35,7 @@ export default function RootLayout({
         >
           <Header />
           {children}
+          <Footer />
         </Auth0Provider>
       </body>
     </html>
