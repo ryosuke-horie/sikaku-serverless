@@ -131,7 +131,7 @@ export class InfraStack extends Stack {
       "createPostHandler",
       {
         runtime: lambda.Runtime.NODEJS_18_X,
-        entry: path.join(__dirname, "../lambda/createPost.ts"),
+        entry: path.join(__dirname, "../lambda/posts/createPost.ts"),
         handler: "index.handler", // デプロイするとindex.mjsになるため
         bundling: {
           externalModules: [
@@ -148,7 +148,7 @@ export class InfraStack extends Stack {
       "listPostsHandler",
       {
         runtime: lambda.Runtime.NODEJS_18_X,
-        entry: path.join(__dirname, "../lambda/listPosts.ts"),
+        entry: path.join(__dirname, "../lambda/posts/listPosts.ts"),
         handler: "index.handler", // デプロイするとindex.mjsになるため
         bundling: {
           externalModules: [

@@ -8,7 +8,7 @@ export const handler = async (event) => {
   const requestBody = JSON.parse(event.body);
 
   const qualification =
-    requestBody.majorCategory + "#" + requestBody.minorCategory;
+    `${requestBody.majorCategory}#${requestBody.minorCategory}`;
   const createdAt = new Date().toISOString(); // ISO 8601形式のタイムスタンプ
 
   const item = {
@@ -18,8 +18,6 @@ export const handler = async (event) => {
     MajorCategory: requestBody.majorCategory,
     MinorCategory: requestBody.minorCategory,
     Content: requestBody.content,
-    // Auth0: requestBody.auth0user, // 認証情報がある場合はこの行をアンコメント
-    // その他の必要な属性...
   };
 
   // DynamoDBに書き込むためのPutCommandを作成
