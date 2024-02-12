@@ -142,8 +142,27 @@ export class InfraStack extends Stack {
       }
     );
 
+    // Lambda関数として、listPosts をデプロイする
+    const listPosts = new aws_lambda_nodejs.NodejsFunction(
+      this,
+      "listPostsHandler",
+      {
+        runtime: lambda.Runtime.NODEJS_18_X,
+        entry: path.join(__dirname, "../lambda/listPosts.ts"),
+        handler: "index.handler", // デプロイするとindex.mjsになるため
+        bundling: {
+          externalModules: [
+            "@aws-sdk/lib-dynamodb",
+            "@aws-sdk/client-dynamodb",
+          ],
+        },
+      }
+    );
+
     // createPost関数にDynamoDBの書き込み権限を付与する
     post_table.grantReadWriteData(createPost);
+    // listPosts関数にDynamoDBの読み込み権限を付与する
+    post_table.grantReadData(listPosts);
 
     // createPost をAPIGatewayのエンドポイントとして公開する
     const api = new apigw.LambdaRestApi(this, "Endpoint", {
@@ -157,5 +176,16 @@ export class InfraStack extends Stack {
 
     // APIGatewayのエンドポイントにPOSTメソッドを追加する
     api.root.addMethod("POST");
+
+    // POST /create
+    const create = api.root.addResource("create");
+    create.addMethod(
+      "POST",
+      new cdk.aws_apigateway.LambdaIntegration(createPost)
+    );
+
+    // GET /list
+    const list = api.root.addResource("list");
+    list.addMethod("GET", new cdk.aws_apigateway.LambdaIntegration(listPosts)); // GET /list
   }
 }
