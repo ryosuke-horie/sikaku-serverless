@@ -1,39 +1,47 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
-const client = new DynamoDBClient({});
+const client = new DynamoDBClient({
+  region: "ap-northeast-1", // 適切なリージョンを指定
+});
 const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event) => {
-  // CORS設定
   const headers = {
-    "Access-Control-Allow-Origin": "*", // Ideally, this should not be '*', but the domain of your frontend application.
-    "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-    "Access-Control-Allow-Methods": "OPTIONS,POST,GET", // You can add more methods as per your requirement.
-    "Access-Control-Allow-Headers": "Content-Type", // You can add more headers as per your requirement.
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+    "Access-Control-Allow-Headers": "Content-Type",
   };
 
-  try {
-    // リクエストからpost_idを取得
-    const postId = event.queryStringParameters?.post_id;
+  console.log(event);
 
-    if (!postId) {
+  try {
+    const post_id = event.queryStringParameters?.post_id;
+    const created_at = event.queryStringParameters?.created_at; // クライアントから正しく送信されていることが前提
+
+    if (!post_id || !created_at) {
+      console.log(post_id, created_at);
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ message: "post_id is required" }),
+        body: JSON.stringify({
+          message: "post_id and created_at are required",
+        }),
       };
     }
 
-    // DynamoDBからデータを取得
-    const command = new GetCommand({
-      TableName: "posts_table", // DynamoDBテーブル名
-      Key: { post_id: postId },
+    const command = new QueryCommand({
+      TableName: "posts-table",
+      KeyConditionExpression: "post_id = :post_id AND created_at = :created_at",
+      ExpressionAttributeValues: {
+        ":post_id": post_id,
+        ":created_at": created_at,
+      },
     });
 
-    const { Item } = await docClient.send(command);
-
-    if (!Item) {
+    const { Items } = await docClient.send(command);
+    if (!Items || Items.length === 0) {
       return {
         statusCode: 404,
         headers,
@@ -41,12 +49,8 @@ export const handler = async (event) => {
       };
     }
 
-    // レスポンスを返す
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(Item),
-    };
+    // 通常、Queryは複数のアイテムを返す可能性があるため、最初のアイテムを返す
+    return { statusCode: 200, headers, body: JSON.stringify(Items[0]) };
   } catch (error) {
     console.error("Error:", error);
     return {

@@ -6,8 +6,9 @@ import { useState, useEffect } from 'react';
 import Card from './_components/card';
 
 interface CardData {
-  title: string;
-  // 他のプロパティを追加
+  post_id: string;
+  Title: string;
+  created_at: string;
 }
 
 export default function Home() {

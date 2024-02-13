@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 
 interface CardData {
   post_id: string;
-  title: string;
-  // 必要に応じて他のプロパティを追加
+  Title: string;
+  created_at: string;
 }
 
 interface CardProps {
@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
   const router = useRouter(); // useRouterフックを使用
 
   const handleClick = () => {
-    void router.push(`posts?post_id=${cardData.post_id}`);
+    void router.push(`posts?post_id=${cardData.post_id}&created_at=${cardData.created_at}`);
   };
 
   return (
