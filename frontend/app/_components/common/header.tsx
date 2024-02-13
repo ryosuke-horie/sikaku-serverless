@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
+import Link from 'next/link';
 
 import LoginButton from '../auth/login';
 import LogoutButton from '../auth/logout';
@@ -23,7 +24,9 @@ const Header = () => {
     return (
       <div className="navbar bg-base-100">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">CertifyHub</a>
+          <Link className="btn btn-ghost text-xl" href="/">
+            資格の種
+          </Link>
         </div>
         <div className="flex-none">
           <CreateButton />
