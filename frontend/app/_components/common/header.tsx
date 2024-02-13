@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import LoginButton from '../auth/login';
@@ -25,6 +26,7 @@ const Header = () => {
       <div className="navbar bg-base-100">
         <div className="flex-1">
           <Link className="btn btn-ghost text-xl" href="/">
+            <Image src="/icon.webp" alt="資格の種 アイコン" width={50} height={50} />
             資格の種
           </Link>
         </div>
