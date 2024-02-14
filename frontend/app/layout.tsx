@@ -21,8 +21,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <link rel="icon" href="/icon.webp" />
+        <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="資格の種は、資格取得のための学習をサポートするサービスです。" />
+        <meta name="title" content="資格の種|IT資格体験記共有プラットフォーム" />
       </head>
       <body className={inter.className}>
         <Auth0Provider
