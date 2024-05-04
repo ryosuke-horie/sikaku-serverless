@@ -64,23 +64,8 @@ export class InfraStack extends Stack {
       sikakuServerlessS3BucketPolicyStatement
     );
 
-    // // 利用するホストゾーンをドメイン名で取得
-    // // ホストゾーンIDを取得
-    // const hostedZoneId = route53.HostedZone.fromLookup(this, "HostedZoneId", {
-    // 	domainName: "timetable-hideskick.net",
-    // });
-
-    // // 証明書を取得
-    // const certificate = Certificate.fromCertificateArn(
-    // 	this,
-    // 	"Certificate",
-    // 	"arn:aws:acm:us-east-1:851725614224:certificate/5b4f1664-f268-4e91-9461-31cccc26f0ca",
-    // );
-
     // CloudFrontディストリビューションを作成する
     const distribution = new aws_cloudfront.Distribution(this, "Distribution", {
-      // domainNames: ["timetable-hideskick.net"],
-      // certificate,
       comment: "sikaku-serverless-distribution",
       defaultRootObject: "index.html",
       defaultBehavior: {
@@ -95,15 +80,6 @@ export class InfraStack extends Stack {
       },
       priceClass: aws_cloudfront.PriceClass.PRICE_CLASS_100,
     });
-
-    // // Route53レコード設定
-    // new route53.ARecord(this, "ARecord", {
-    // 	zone: hostedZoneId,
-    // 	target: route53.RecordTarget.fromAlias(
-    // 		new targets.CloudFrontTarget(distribution),
-    // 	),
-    // 	recordName: "timetable-hideskick.net",
-    // });
 
     // ----------------- DynamoDB -----------------
 

@@ -5,8 +5,8 @@ const GITHUB_OWNER = "ryosuke-horie";
 const GITHUB_REPO = "sikaku-serverless";
 const CDK_QUALIFIER = "hnb659fds"; // 既定値*変えなくても動く
 const S3_BUCKET_NAME =
-  "infrastack-sikakuserverlesss3bucket7891b848-guqhwhd3j1lk";
-const CLOUDFRONT_DISTRIBUTION_ID = "E14LK04MU0H2KB";
+  "**********";
+const CLOUDFRONT_DISTRIBUTION_ID = "*******";
 
 /**
  * @description GitHub Actions によるデプロイを許可する OIDC プロバイダーを作成する。
